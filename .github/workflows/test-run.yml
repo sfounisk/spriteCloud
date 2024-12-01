@@ -1,0 +1,71 @@
+name: reqres/saucedemo Automation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Prepare results directory
+        run: mkdir -p results
+
+      - name: Run API tests
+        id: run_tests
+        continue-on-error: true
+        run: python -m robot --outputdir results tests.robot
+
+      - name: Upload First Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: First Run Test Results - ${{ github.run_number }}
+          path: results
+
+      - name: Rerun Failed Tests
+        id: rerun_failed_tests
+        continue-on-error: true
+        if: ${{ steps.run_tests.outcome == 'failure' }}
+        run: python -m robot --outputdir results --rerunfailed results/output.xml --output rerun_output.xml tests.robot
+
+      - name: Merge Output Files
+        if: ${{ failure() || steps.run_tests.outcome == 'failure' }}
+        continue-on-error: true
+        run: |
+          cd results
+          rebot --output output.xml -l log.html --merge output.xml rerun_output.xml
+
+      - name: Upload Rerun Test Results
+        if: ${{ steps.rerun_failed_tests.outcome == 'failure' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Rerun Test Results - ${{ github.run_number }}
+          path: results
+
+      - name: Run's status
+        run: |
+          if [[ "${{ steps.run_tests.outcome }}" == "success" ]]; then
+            exit 0
+          elif [[ "${{ steps.rerun_failed_tests.outcome }}" == "success" ]]; then
+            exit 0
+          else
+            exit 1
+          fi
