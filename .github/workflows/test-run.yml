@@ -25,10 +25,14 @@ jobs:
         run: |
           pip install -r requirements.txt
 
+      - name: Initiate rfBrowser
+        run: |
+          rfbrowser init
+
       - name: Prepare results directory
         run: mkdir -p results
 
-      - name: Run API tests
+      - name: Run tests
         id: run_tests
         continue-on-error: true
         run: python -m robot --outputdir results *.robot
