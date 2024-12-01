@@ -1,0 +1,19 @@
+{
+    "page": "integer",
+    "per_page": "integer",
+    "total": "integer",
+    "total_pages": "integer",
+    "data": [
+      {
+        "id": "integer",
+        "email": "string",
+        "first_name": "string",
+        "last_name": "string",
+        "avatar": "string"
+      }
+    ],
+    "support": {
+      "url": "string",
+      "text": "string"
+    }
+  }
