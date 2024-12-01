@@ -30,7 +30,7 @@ pip install -r requirements.txt
 If you have multiple python versions installed please make sure you are using python3 when
 creating the virtual environment, by passing the python 3 root during creation
 
-Example: `c:\Python35\python -m venv ../android_venv`
+Example: `c:\Python35\python -m venv ../sprite_venv`
 
 ## For Mac / Linux
 ```
