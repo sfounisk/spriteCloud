@@ -23,7 +23,6 @@ Validate errors in login page
     Click    id=login-button
     ${error_msg}=    Get Text    //h3
     Should Be Equal    ${error_msg}    Epic sadface: Password is required
-    #Fill Text    id=user-name    testName
     Fill Text    id=password    Invalid
     Click    id=login-button
     ${error_msg}=    Get Text    //h3
@@ -36,6 +35,13 @@ Validate errors in login page
 
 
 E2E test for valid user
+    [Documentation]    
+    ...    Login with a valid user
+    ...    Add two products in the cart
+    ...    Go to cart
+    ...    Continue to the next step and add your personal information
+    ...    Continue to the overview page and finilize your order
+    
     Login valid customer
 
     # Get text from item 4
@@ -117,7 +123,7 @@ E2E test for valid user
 Validate inventory item page
     Login valid customer
 
-    #Get text from item 1
+    # Get text from item 1
     ${title}=    Get Text    a#item_4_title_link
     ${description}=    Get Text    xpath=//a[@id="item_4_title_link"]/following-sibling::div[@class="inventory_item_desc"]
     ${price}=    Get Text    xpath=//button[@id="add-to-cart-sauce-labs-backpack"]/preceding-sibling::div[@class="inventory_item_price"]
