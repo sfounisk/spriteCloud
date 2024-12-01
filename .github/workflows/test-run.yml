@@ -31,7 +31,7 @@ jobs:
       - name: Run API tests
         id: run_tests
         continue-on-error: true
-        run: python -m robot --outputdir results tests.robot
+        run: python -m robot --outputdir results *.robot
 
       - name: Upload First Test Results
         if: always()
@@ -44,7 +44,7 @@ jobs:
         id: rerun_failed_tests
         continue-on-error: true
         if: ${{ steps.run_tests.outcome == 'failure' }}
-        run: python -m robot --outputdir results --rerunfailed results/output.xml --output rerun_output.xml tests.robot
+        run: python -m robot --outputdir results --rerunfailed results/output.xml --output rerun_output.xml *.robot
 
       - name: Merge Output Files
         if: ${{ failure() || steps.run_tests.outcome == 'failure' }}
